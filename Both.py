@@ -1,17 +1,16 @@
-#
-
+#Imports
 from machine import Pin
 import time
 
-#definitions
+#Definitions
 trig = Pin(4, Pin.OUT)
 echo = Pin (5, Pin.IN, Pin.PULL_DOWN)
 
 trig2 = Pin(0, Pin.OUT)
 echo2 = Pin (1, Pin.IN, Pin.PULL_DOWN)
 
-stepDivision = 0.25 #to make motors smoother, make this smaller: pick a value from 1/2, 1/4, 1/8, 1/16. currently 1/4
-stepsPerDegree = (200 / stepDivision) / 360
+stepDivision = 0.125 #to make motors smoother, make this smaller: pick a value from 1/2, 1/4, 1/8, 1/16. currently 1/8
+stepsPerDegree = (200 / stepDivision) / 360 #how many steps to take per degree of movement.
     
 direction1 = Pin(14, Pin.OUT)
 step1 = Pin(15, Pin.OUT)
@@ -23,12 +22,12 @@ step2 = Pin(17, Pin.OUT)
 #Function
 def move(deg1, deg2):
     if deg1 < 0:
-        direction1.on()
-        deg1 = abs(deg1)
+        direction1.on() #goes one direction
+        deg1 = abs(deg1)#needs to be positive now for it to work.
     else:
-        direction1.off()
+        direction1.off() #goes another direction
         
-    if deg2 < 0:
+    if deg2 < 0: #same but for other motor
         direction2.on()
         deg2 = abs(deg2)
     else:
@@ -50,7 +49,7 @@ def move(deg1, deg2):
         
 #Code
 
-while True:
+while True: #Runs forever.
     
     trig.off()
     time.sleep(0.1)
@@ -83,26 +82,28 @@ while True:
         
     distance2 = (end2 - start2) / 58.8
     print (round(distance2, 1), "D2")
-    #distance = 19
-    #distance2 = 19
+    
+    #If we need a set value for distances.
+    #distance = 0
+    #distance2 = 5
 
     
     if distance < 10:
         print("D1 less than 10")
-        distance = -abs(distance)
+        distance = -abs(round(distance, 1))
         print(distance, "D1")
         
     if distance2 < 10:
         print("D2 less than 10")
-        distance2 = -abs(distance2)
+        distance2 = -abs(round(distance2, 1))
         print(distance2, "D2")
         
         
-    # Move
+    # If distance too large
     if distance > 20 or distance2 > 20:
         print("Not today thank you :)\n ")
         
-    # If distance too large:
+    # Move
     else: 
         print("moving")
         move(distance, distance2)
@@ -110,11 +111,6 @@ while True:
     time.sleep(2)
     
 ############################################################################
-
-
-
-
-move(distance, distance2) # draw edge 1
-move(distance, distance2) # draw edge 2
-move(distance, distance2) # draw edge 3
-move(distance, distance2) # draw edge 4
+    #when distance -ve turns right
+    #when distance +ve turns left
+    
